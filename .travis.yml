@@ -10,6 +10,7 @@ before_install:
   - composer self-update
   - composer validate
   - yes '' | pecl install -f apcu
+  - yes '' | pecl install -f igbinary
 
 install:
   - composer install --prefer-dist
