@@ -21,10 +21,9 @@
  * @since 2020-08-07
  */
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 namespace CoffeePhp\Igbinary;
-
 
 use CoffeePhp\Igbinary\Contract\IgbinaryTranslatorInterface;
 use CoffeePhp\Igbinary\Exception\IgbinarySerializeException;
