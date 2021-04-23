@@ -1,5 +1,7 @@
 # Coffee PHP - Igbinary
 
+![Build](https://github.com/Coffee-PHP/Igbinary/workflows/Build/badge.svg)
+
 Provides classes for handling Igbinary data.
 
 ```

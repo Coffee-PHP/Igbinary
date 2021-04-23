@@ -27,14 +27,8 @@ namespace CoffeePhp\Igbinary\Integration;
 
 use CoffeePhp\ComponentRegistry\Contract\ComponentRegistrarInterface;
 use CoffeePhp\Di\Contract\ContainerInterface;
-use CoffeePhp\Edi\Contract\EdiArrayTranslatorInterface;
-use CoffeePhp\Edi\Contract\EdiExtendedArrayTranslatorInterface;
-use CoffeePhp\Edi\Contract\EdiObjectTranslatorInterface;
-use CoffeePhp\Edi\Contract\EdiTranslatorInterface;
 use CoffeePhp\Igbinary\Contract\IgbinaryTranslatorInterface;
 use CoffeePhp\Igbinary\IgbinaryTranslator;
-use CoffeePhp\Serialize\Contract\SerializerInterface;
-use CoffeePhp\Unserialize\Contract\UnserializerInterface;
 
 /**
  * Class IgbinaryComponentRegistrar
@@ -44,30 +38,19 @@ use CoffeePhp\Unserialize\Contract\UnserializerInterface;
  */
 final class IgbinaryComponentRegistrar implements ComponentRegistrarInterface
 {
+    /**
+     * IgbinaryComponentRegistrar constructor.
+     */
+    public function __construct(private ContainerInterface $di)
+    {
+    }
 
     /**
      * @inheritDoc
      */
-    public function register(ContainerInterface $di): void
+    public function register(): void
     {
-        if (
-            !$di->has(SerializerInterface::class) ||
-            !$di->has(UnserializerInterface::class) ||
-            !$di->has(EdiArrayTranslatorInterface::class) ||
-            !$di->has(EdiExtendedArrayTranslatorInterface::class) ||
-            !$di->has(EdiObjectTranslatorInterface::class) ||
-            !$di->has(EdiTranslatorInterface::class)
-        ) {
-            $di->bind(SerializerInterface::class, IgbinaryTranslatorInterface::class);
-            $di->bind(UnserializerInterface::class, IgbinaryTranslatorInterface::class);
-
-            $di->bind(EdiArrayTranslatorInterface::class, IgbinaryTranslatorInterface::class);
-            $di->bind(EdiExtendedArrayTranslatorInterface::class, IgbinaryTranslatorInterface::class);
-            $di->bind(EdiObjectTranslatorInterface::class, IgbinaryTranslatorInterface::class);
-            $di->bind(EdiTranslatorInterface::class, IgbinaryTranslatorInterface::class);
-        }
-
-        $di->bind(IgbinaryTranslatorInterface::class, IgbinaryTranslator::class);
-        $di->bind(IgbinaryTranslator::class, IgbinaryTranslator::class);
+        $this->di->bind(IgbinaryTranslator::class, IgbinaryTranslator::class);
+        $this->di->bind(IgbinaryTranslatorInterface::class, IgbinaryTranslator::class);
     }
 }

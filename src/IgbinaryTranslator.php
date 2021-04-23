@@ -30,12 +30,8 @@ use CoffeePhp\Igbinary\Exception\IgbinarySerializeException;
 use CoffeePhp\Igbinary\Exception\IgbinaryUnserializeException;
 use Throwable;
 
-use function get_class;
 use function igbinary_serialize;
 use function igbinary_unserialize;
-use function is_array;
-use function is_object;
-use function is_string;
 
 /**
  * Class IgbinaryTranslator
@@ -52,21 +48,9 @@ final class IgbinaryTranslator implements IgbinaryTranslatorInterface
     public function serializeArray(array $array): string
     {
         try {
-            $serialized = igbinary_serialize($array);
-            if (!is_string($serialized)) {
-                throw new IgbinarySerializeException(
-                    'Data returned from array is not a binary string.'
-                );
-            }
-            return $serialized;
-        } catch (IgbinarySerializeException $e) {
-            throw $e;
+            return (string)igbinary_serialize($array);
         } catch (Throwable $e) {
-            throw new IgbinarySerializeException(
-                "Failed to serialize data: {$e->getMessage()}",
-                (int)$e->getCode(),
-                $e
-            );
+            throw new IgbinarySerializeException($e->getMessage(), (int)$e->getCode(), $e);
         }
     }
 
@@ -76,48 +60,21 @@ final class IgbinaryTranslator implements IgbinaryTranslatorInterface
     public function unserializeArray(string $string): array
     {
         try {
-            /** @var mixed|array $unserialized */
-            $unserialized = igbinary_unserialize($string);
-            if (!is_array($unserialized)) {
-                throw new IgbinaryUnserializeException(
-                    "Data returned from igbinary string is not an array: $string"
-                );
-            }
-            return $unserialized;
-        } catch (IgbinaryUnserializeException $e) {
-            throw $e;
+            return (array)igbinary_unserialize($string);
         } catch (Throwable $e) {
-            throw new IgbinaryUnserializeException(
-                "Failed to unserialize data: {$e->getMessage()}",
-                (int)$e->getCode(),
-                $e
-            );
+            throw new IgbinaryUnserializeException($e->getMessage(), (int)$e->getCode(), $e);
         }
     }
 
     /**
      * @inheritDoc
      */
-    public function serializeObject(object $class): string
+    public function serializeObject(object $object): string
     {
         try {
-            $serialized = igbinary_serialize($class);
-            if (!is_string($serialized)) {
-                $class = get_class($class);
-                throw new IgbinarySerializeException(
-                    "Data returned from class is not a binary string: $class"
-                );
-            }
-            return $serialized;
-        } catch (IgbinarySerializeException $e) {
-            throw $e;
+            return (string)igbinary_serialize($object);
         } catch (Throwable $e) {
-            $className = get_class($class);
-            throw new IgbinarySerializeException(
-                "Failed to serialize class: $className ; Error: {$e->getMessage()}",
-                (int)$e->getCode(),
-                $e
-            );
+            throw new IgbinarySerializeException($e->getMessage(), (int)$e->getCode(), $e);
         }
     }
 
@@ -127,22 +84,9 @@ final class IgbinaryTranslator implements IgbinaryTranslatorInterface
     public function unserializeObject(string $string): object
     {
         try {
-            /** @var mixed|object $unserialized */
-            $unserialized = igbinary_unserialize($string);
-            if (!is_object($unserialized)) {
-                throw new IgbinaryUnserializeException(
-                    "Data returned from binary string failed to unserialize into an object: $string"
-                );
-            }
-            return $unserialized;
-        } catch (IgbinaryUnserializeException $e) {
-            throw $e;
+            return (object)igbinary_unserialize($string);
         } catch (Throwable $e) {
-            throw new IgbinaryUnserializeException(
-                "Failed to unserialize string: $string ; Error: {$e->getMessage()}",
-                (int)$e->getCode(),
-                $e
-            );
+            throw new IgbinaryUnserializeException($e->getMessage(), (int)$e->getCode(), $e);
         }
     }
 }
